@@ -1,0 +1,13 @@
+/* 
+  Common.strings
+  Common
+
+  Created by Rodion on 08/10/2019.
+  Copyright © 2019 LetsSee. All rights reserved.
+*/
+
+"albums.stored" = "Stored albums";
+"search" = "Search";
+"artist" = "Artist";
+"check.connection" = "Check your internet connection";
+"something.goes.wrong" = "Something goes wrong";
