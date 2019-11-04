@@ -1,9 +1,9 @@
 //
 //  Coordinator.swift
-//  Wellmax
+//  Craving for Sound
 //
 //  Created by Rodion on 28/08/2019.
-//  Copyright © 2019 Wellmax Inc. All rights reserved.
+//  Copyright © 2019 LetsSee. All rights reserved.
 //
 
 import UIKit
