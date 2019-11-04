@@ -7,10 +7,6 @@ build/
 DerivedData/
 
 ##Inherited from mercurial repo
-disrapp-proto/
-grpc-swift
-Config.plist
-categories.txt
 CraivingForSound/Resources/R.generated.swift
 Common/Resources/R.generated.swift
 
