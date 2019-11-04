@@ -71,7 +71,7 @@ public struct Artist: Decodable {
 
 public struct Album: Decodable {
     
-    public let mbid: String?
+    public let mbid: String!
     public let name: String
     public let artist: Artist
     public let images: [Image]

@@ -17,18 +17,34 @@ public struct R: Rswift.Validatable {
   
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   public struct string {
-    /// This `R.string.common` struct is generated, and contains static references to 5 localization keys.
+    /// This `R.string.common` struct is generated, and contains static references to 13 localization keys.
     public struct common {
       /// Value: Artist
       public static let artist = Rswift.StringResource(key: "artist", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: Check your internet connection
       public static let checkConnection = Rswift.StringResource(key: "check.connection", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Close
+      public static let close = Rswift.StringResource(key: "close", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Delete
+      public static let delete = Rswift.StringResource(key: "delete", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Network error
+      public static let networkError = Rswift.StringResource(key: "network.error", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: No albums saved so far. Press search and add some albums
+      public static let noAlbums = Rswift.StringResource(key: "no.albums", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: No connection
+      public static let networkUnreachable = Rswift.StringResource(key: "network.unreachable", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Ok
+      public static let ok = Rswift.StringResource(key: "ok", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Save
+      public static let save = Rswift.StringResource(key: "save", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: Search
       public static let search = Rswift.StringResource(key: "search", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: Something goes wrong
       public static let somethingGoesWrong = Rswift.StringResource(key: "something.goes.wrong", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
       /// Value: Stored albums
       public static let albumsStored = Rswift.StringResource(key: "albums.stored", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
+      /// Value: Try again
+      public static let tryAgain = Rswift.StringResource(key: "try.again", tableName: "Common", bundle: R.hostingBundle, locales: [], comment: nil)
       
       /// Value: Artist
       public static func artist(_: Void = ()) -> String {
@@ -38,6 +54,41 @@ public struct R: Rswift.Validatable {
       /// Value: Check your internet connection
       public static func checkConnection(_: Void = ()) -> String {
         return NSLocalizedString("check.connection", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: Close
+      public static func close(_: Void = ()) -> String {
+        return NSLocalizedString("close", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: Delete
+      public static func delete(_: Void = ()) -> String {
+        return NSLocalizedString("delete", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: Network error
+      public static func networkError(_: Void = ()) -> String {
+        return NSLocalizedString("network.error", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: No albums saved so far. Press search and add some albums
+      public static func noAlbums(_: Void = ()) -> String {
+        return NSLocalizedString("no.albums", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: No connection
+      public static func networkUnreachable(_: Void = ()) -> String {
+        return NSLocalizedString("network.unreachable", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: Ok
+      public static func ok(_: Void = ()) -> String {
+        return NSLocalizedString("ok", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: Save
+      public static func save(_: Void = ()) -> String {
+        return NSLocalizedString("save", tableName: "Common", bundle: R.hostingBundle, comment: "")
       }
       
       /// Value: Search
@@ -53,6 +104,11 @@ public struct R: Rswift.Validatable {
       /// Value: Stored albums
       public static func albumsStored(_: Void = ()) -> String {
         return NSLocalizedString("albums.stored", tableName: "Common", bundle: R.hostingBundle, comment: "")
+      }
+      
+      /// Value: Try again
+      public static func tryAgain(_: Void = ()) -> String {
+        return NSLocalizedString("try.again", tableName: "Common", bundle: R.hostingBundle, comment: "")
       }
       
       fileprivate init() {}

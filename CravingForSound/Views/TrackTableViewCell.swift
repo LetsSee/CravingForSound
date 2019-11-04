@@ -17,7 +17,7 @@ final class TrackTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func setup(with viewModel: TrackViewPresentingProtocol) {
+    func setup(with viewModel: TrackPresentingProtocol) {
         nameLabel.text = viewModel.name
         numberLabel.text = viewModel.number
     }

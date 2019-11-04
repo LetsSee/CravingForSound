@@ -8,14 +8,18 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 import SnapKit
 import Common
+
+let albumHeaderHeight: CGFloat = 160
 
 final class AlbumHeaderView: UIView {
     
     let imageView = UIImageView()
     let titleLabel = UILabel()
     let artistLabel = UILabel()
+    let addButton = UIButton()
     
     let disposeBag = DisposeBag()
     
@@ -38,9 +42,10 @@ final class AlbumHeaderView: UIView {
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(artistLabel)
+        addSubview(addButton)
         
         imageView.snp.makeConstraints { make in
-            make.height.width.equalTo(100)
+            make.height.width.equalTo(140)
             make.top.leading.equalToSuperview().offset(doubleOffset)
         }
         
@@ -56,17 +61,33 @@ final class AlbumHeaderView: UIView {
             make.trailing.equalToSuperview().inset(standardOffset)
         }
         
+        addButton.snp.makeConstraints { make in
+            make.leading.equalTo(imageView.snp.trailing).offset(standardOffset)
+            make.width.equalTo(80)
+            make.height.equalTo(34)
+            make.bottom.equalTo(imageView.snp.bottom)
+        }
+        
         snp.makeConstraints { make in
-            make.height.equalTo(150)
+            make.height.equalTo(albumHeaderHeight)
+            make.width.equalTo(UIScreen.main.bounds.width)
         }
     }
     
     private func configureUI() {
-        titleLabel.font = .boldSystemFont(ofSize: 20)
+        addButton.backgroundColor = .flatGreen
+        addButton.titleColor = .white
+        addButton.title = R.string.common.save().uppercased()
+        addButton.titleFont = .systemFont(ofSize: 14)
+        addButton.clipsToBounds = true
+        addButton.layer.cornerRadius = 15
+        
+        titleLabel.font = .boldSystemFont(ofSize: 21)
+        titleLabel.numberOfLines = 2
         artistLabel.font = .systemFont(ofSize: 17)
     }
     
-    func configue(with viewModel: AlbumHeaderViewModel) {
+    fileprivate func configue(with viewModel: AlbumPresentingProtocol) {
         if let url = viewModel.imageUrl {
             imageView.af_setImage(withURL: url, placeholderImage: R.image.placeholder())
         } else {
@@ -75,6 +96,18 @@ final class AlbumHeaderView: UIView {
         
         titleLabel.text = viewModel.title
         artistLabel.text = viewModel.artist
+        addButton.title = viewModel.isSaved
+            ? R.string.common.delete().uppercased()
+            : R.string.common.save().uppercased()
     }
     
+}
+
+extension Reactive where Base: AlbumHeaderView {
+    var state: Binder<AlbumPresentingProtocol> {
+        return Binder(self.base) { view, state in
+            view.configue(with: state)
+        }
+    }
+
 }

@@ -15,5 +15,9 @@ import UIKit
     public let debug = false
 #endif
 
+public let standardRowHeight: CGFloat = 44
 public let standardOffset: CGFloat = 8
 public let doubleOffset: CGFloat = 16
+
+public let normalDuration: TimeInterval = 0.3
+public let fastDuration: TimeInterval = 0.2

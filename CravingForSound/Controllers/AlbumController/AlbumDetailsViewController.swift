@@ -16,10 +16,12 @@ final class AlbumDetailsViewController: UIViewController {
     // MARK: - Properties
     
     private let disposeBag = DisposeBag()
+    private let headerView = AlbumHeaderView()
+    private let spinner  = SpinnerView()
+    
     var viewModel: AlbumDetailsViewModel!
     
-    @IBOutlet weak var tableView: UITableView!
-    private let headerView = AlbumHeaderView()
+    @IBOutlet private weak var tableView: UITableView!
     
     // MARK: - Life cycle
     
@@ -27,27 +29,46 @@ final class AlbumDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupRx()
+        
         viewModel.getAlbumInfo()
     }
     
     // MARK: - Setup
     
     private func setupUI() {
-        navigationItem.title = viewModel.headerViewModel.value.title
         tableView.tableHeaderView = headerView
+        tableView.tableFooterView = UIView()
+        addSpinner(spinner, in: tableView, customTopOffset: albumHeaderHeight)
     }
     
     private func setupRx() {
-        viewModel.items.bind(to: items()).disposed(by: disposeBag)
-        viewModel.headerViewModel.subscribe(onNext: { [unowned self] headerViewModel in
-            self.headerView.configue(with: headerViewModel)
-            self.tableView.layoutIfNeeded()
+        viewModel.albumViewModel.map { $0.tracks }.bind(to: items()).disposed(by: disposeBag)
+        viewModel.albumViewModel.bind(to: headerView.rx.state).disposed(by: disposeBag)
+
+        headerView.addButton.rx.tap.subscribe(onNext: { [unowned self] _ in
+            self.viewModel.manageAlbumKeeping()
         }).disposed(by: disposeBag)
+        
+        viewModel.warning.subscribe(onNext: { [unowned self] message in
+            self.showToastView(with: message)
+        }).disposed(by: disposeBag)
+        
+        viewModel.errorMessage.subscribe(onNext: { [unowned self] message in
+            self.alert(message: message, tryAgainHandler: nil) {
+                self.viewModel.navigation.goBack.onNext()
+            }
+        }).disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected.subscribe(onNext: { [unowned self] indexPath in
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }).disposed(by: disposeBag)
+        
+        viewModel.isLoading.bind(to: spinner.rx.isVisible).disposed(by: disposeBag)
     }
     
     // MARK: - Rx methods
     
-    func items() -> (_ source: Observable<[TrackViewModel]>) -> Disposable {
+    private func items() -> (_ source: Observable<[TrackPresentingProtocol]>) -> Disposable {
         return { [unowned self] source in
             source
                 .bind(to: self.tableView.rx

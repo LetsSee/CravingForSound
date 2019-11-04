@@ -17,21 +17,23 @@ final class ArtistLookupViewController: UIViewController {
     // MARK: - Properties
     
     private let disposeBag = DisposeBag()
+    private let searchBar = UISearchBar()
+    private let spinner  = SpinnerView()
+    
     var viewModel: ArtistLookupViewModel!
     
-    @IBOutlet private weak var searchBar: UISearchBar!
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         setupRx()
+        setupUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         searchBar.becomeFirstResponder()
     }
     
@@ -41,6 +43,9 @@ final class ArtistLookupViewController: UIViewController {
         tableView.rowHeight = 60
         navigationItem.title = viewModel.title
         searchBar.placeholder = R.string.common.artist()
+        searchBar.showsCancelButton = true
+        navigationItem.titleView = searchBar
+        addSpinner(spinner)
     }
     
     func items() -> (_ source: Observable<[ArtistViewModel]>) -> Disposable {
@@ -55,7 +60,7 @@ final class ArtistLookupViewController: UIViewController {
     }
     
     private func setupRx() {
-        viewModel.items.bind(to: items()).disposed(by: disposeBag)
+        viewModel.items.asDriver().drive(items()).disposed(by: disposeBag)
         
         searchBar.rx.cancelButtonClicked.subscribe(onNext: { [unowned self] _ in
             self.viewModel.navigation.goBack.onNext()
@@ -74,14 +79,20 @@ final class ArtistLookupViewController: UIViewController {
             .drive(onNext: {[unowned self] height in
             self.tableView.contentInset.bottom = height
         }).disposed(by: disposeBag)
-        
+
         tableView.rx.itemSelected.subscribe(onNext: { [unowned self] indexPath in
             self.tableView.deselectRow(at: indexPath, animated: true)
         }).disposed(by: disposeBag)
-        
+
         tableView.rx.modelSelected(ArtistViewModel.self).subscribe(onNext: { [unowned self] artist in
             self.viewModel.navigation.artistDetails.onNext(artist)
         }).disposed(by: disposeBag)
+        
+        viewModel.warning.subscribe(onNext: { [unowned self] message in
+            self.showToastView(with: message)
+        }).disposed(by: disposeBag)
+        
+        viewModel.isLoading.bind(to: spinner.rx.isVisible).disposed(by: disposeBag)
     }
     
     deinit {

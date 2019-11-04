@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		660F3F782346A87F00E68C1E /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 660F3F762346A87F00E68C1E /* Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66147F9E23703F4700E03CD4 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66147F9D23703F4700E03CD4 /* DispatchQueue.swift */; };
 		6678854E234B4A9900BFB5C3 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6678854D234B4A9900BFB5C3 /* Common.swift */; };
 		6678855F234BEA8200BFB5C3 /* Common.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6678855E234BEA8200BFB5C3 /* Common.strings */; };
 		66788564234BEC7A00BFB5C3 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66788563234BEC7A00BFB5C3 /* R.generated.swift */; };
 		6678856A234CEF8C00BFB5C3 /* LeftAlignedLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66788569234CEF8C00BFB5C3 /* LeftAlignedLayout.swift */; };
-		66B81687234F11BB000B2499 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B81686234F11BB000B2499 /* Observable+Extensions.swift */; };
+		669A9194235792E6006A8436 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669A9193235792E6006A8436 /* UIColor.swift */; };
+		66B81687234F11BB000B2499 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B81686234F11BB000B2499 /* Observable.swift */; };
 		7596FFC08EF9705B6C61AB0F /* Pods_Common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1837951B5740E5B668F20B0C /* Pods_Common.framework */; };
 /* End PBXBuildFile section */
 
@@ -22,11 +24,13 @@
 		660F3F732346A87F00E68C1E /* Common.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Common.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		660F3F762346A87F00E68C1E /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		660F3F772346A87F00E68C1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66147F9D23703F4700E03CD4 /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		6678854D234B4A9900BFB5C3 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		6678855E234BEA8200BFB5C3 /* Common.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Common.strings; sourceTree = "<group>"; };
 		66788563234BEC7A00BFB5C3 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		66788569234CEF8C00BFB5C3 /* LeftAlignedLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedLayout.swift; sourceTree = "<group>"; };
-		66B81686234F11BB000B2499 /* Observable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
+		669A9193235792E6006A8436 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		66B81686234F11BB000B2499 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		BAAB89F828CADA9F91592350 /* Pods-Common.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common.debug.xcconfig"; path = "Target Support Files/Pods-Common/Pods-Common.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,7 +113,9 @@
 		66B81685234F11A4000B2499 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				66B81686234F11BB000B2499 /* Observable+Extensions.swift */,
+				66147F9D23703F4700E03CD4 /* DispatchQueue.swift */,
+				66B81686234F11BB000B2499 /* Observable.swift */,
+				669A9193235792E6006A8436 /* UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -253,9 +259,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6678856A234CEF8C00BFB5C3 /* LeftAlignedLayout.swift in Sources */,
+				669A9194235792E6006A8436 /* UIColor.swift in Sources */,
 				6678854E234B4A9900BFB5C3 /* Common.swift in Sources */,
-				66B81687234F11BB000B2499 /* Observable+Extensions.swift in Sources */,
+				66B81687234F11BB000B2499 /* Observable.swift in Sources */,
 				66788564234BEC7A00BFB5C3 /* R.generated.swift in Sources */,
+				66147F9E23703F4700E03CD4 /* DispatchQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

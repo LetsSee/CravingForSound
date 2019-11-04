@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 import Model
 import Net
 
@@ -18,13 +19,16 @@ struct MainViewModel {
     let title = R.string.common.albumsStored()
     private let dataProvider: DataProvidingProtocol
     private let networkService: NetworkServiceProtocol
-    private(set) lazy var items = dataProvider.getAlbums().map { albums in
-        albums.map { AlbumCollectionViewModel(with: $0) }
-    }
+    private let disposeBag = DisposeBag()
+    
+    lazy var albums = try? dataProvider.getAlbums().map { albums in albums.map { AlbumViewModel(with: $0) } }
     
     // MARK: - Navigation
     
-    let artistLookupNavigation = PublishSubject<Void>()
+    let navigation = (
+        artistSearch: PublishSubject<Void>(),
+        albumDetails: PublishSubject<AlbumViewModel>()
+    )
     
     // MARK: - Methods
     
@@ -32,15 +36,5 @@ struct MainViewModel {
         self.dataProvider = dataProvider
         self.networkService = networkService
     }
-
-    func crateTestAlbum() {
-        do {
-            try dataProvider.createTestAlbum()
-        } catch {
-            print("Error: \(error)")
-        }
-    }
-    
-    //let didSelect = PublishRelay<AlbumCollectionViewPresentingProtocol>()
     
 }

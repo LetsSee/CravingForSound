@@ -9,7 +9,7 @@
 import Foundation
 import Net
 
-protocol ArtistViewPresentingProtocol {
+protocol ArtistPresentingProtocol {
     
     var mdib: String { get }
     var name: String { get }
@@ -17,7 +17,7 @@ protocol ArtistViewPresentingProtocol {
     
 }
 
-struct ArtistViewModel: ArtistViewPresentingProtocol {
+struct ArtistViewModel: ArtistPresentingProtocol {
     
     let mdib: String
     let name: String

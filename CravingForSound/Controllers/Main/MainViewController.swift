@@ -17,10 +17,12 @@ final class MainViewController: UIViewController {
     // MARK: - Properties
     
     private let disposeBag = DisposeBag()
+    private let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: nil, action: nil)
+    
     var viewModel: MainViewModel!
     
     @IBOutlet private weak var collectionView: UICollectionView!
-    private let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: nil, action: nil)
+    @IBOutlet private weak var noItemsLabel: UILabel!
     
     // MARK: - Life cycle
     
@@ -36,19 +38,26 @@ final class MainViewController: UIViewController {
         navigationItem.title = viewModel.title
         navigationItem.rightBarButtonItem = searchButton
         collectionView.collectionViewLayout = createCollectionLayout()
+        noItemsLabel.text = R.string.common.noAlbums()
     }
     
     private func setupRx() {
-        viewModel.items.bind(to: items()).disposed(by: disposeBag)
+        viewModel.albums?.do(onNext: { albums in
+            self.noItemsLabel.isHidden = albums.count > 0
+        }).bind(to: items()).disposed(by: disposeBag)
         
         searchButton.rx.tap.subscribe(onNext: { [unowned self] _ in
-            self.viewModel.artistLookupNavigation.onNext()
+            self.viewModel.navigation.artistSearch.onNext()
+        }).disposed(by: disposeBag)
+        
+        collectionView.rx.modelSelected(AlbumViewModel.self).subscribe(onNext: { [unowned self] album in
+            self.viewModel.navigation.albumDetails.onNext(album)
         }).disposed(by: disposeBag)
     }
     
     // MARK: - Rx methods
     
-    func items() -> (_ source: Observable<[AlbumCollectionViewModel]>) -> Disposable {
+    func items() -> (_ source: Observable<[AlbumViewModel]>) -> Disposable {
         return { [unowned self] source in
             source
                 .bind(to: self.collectionView.rx

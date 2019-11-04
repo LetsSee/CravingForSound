@@ -11,15 +11,7 @@ import Net
 import RxSwift
 import RxCocoa
 import Model
-
-struct AlbumHeaderViewModel {
-    
-    let mbid: String?
-    let imageUrl: URL?
-    let title: String
-    let artist: String
-    
-}
+import Common
 
 final class AlbumDetailsViewModel {
     
@@ -28,44 +20,105 @@ final class AlbumDetailsViewModel {
     private let disposeBag = DisposeBag()
     private let networkService: NetworkServiceProtocol
     private let dataProvider: DataProvidingProtocol
+    private let albumId: String
+    private var savedAlbum: Model.Album?
     
-    let id: String?
-    
-    let items = PublishSubject<[TrackViewModel]>()
-    let headerViewModel: BehaviorRelay<AlbumHeaderViewModel>
+    let albumViewModel: BehaviorRelay<AlbumPresentingProtocol>
+    let errorMessage = PublishSubject<String>()
+    let warning = PublishSubject<String>()
+    let isLoading = BehaviorRelay(value: false)
     
     // MARK: - Navigation
     
-    let goBacknavigation = PublishSubject<Void>()
+    let navigation = (
+        goBack: PublishSubject<Void>(),
+        close: PublishSubject<Void>()
+    )
     
-    // MARK: - Methods
+    // MARK: - Setup
     
-    init(with viewModel: AlbumCollectionViewPresentingProtocol,
+    init(with viewModel: AlbumPresentingProtocol,
          networkService: NetworkServiceProtocol,
          dataProvider: DataProvidingProtocol) {
 
-        self.id = viewModel.mbid
-        
-        let header = AlbumHeaderViewModel(mbid: viewModel.mbid,
-                                          imageUrl: viewModel.imageUrl,
-                                          title: viewModel.title,
-                                          artist: viewModel.artist)
-        
-        headerViewModel = BehaviorRelay(value: header)
+        self.albumId = viewModel.mbid
+        albumViewModel = BehaviorRelay(value: viewModel)
         
         self.networkService = networkService
         self.dataProvider = dataProvider
+        self.setup()
     }
     
-    func getAlbumInfo() {
-        let mbid = headerViewModel.value.mbid
-        let title = headerViewModel.value.title
-        
-        networkService.albumInfo(by: mbid, name: title).subscribe(onSuccess: { album in
-            self.items.onNext(album.tracks.map { TrackViewModel(with: $0) })
-        }, onError: { error in
-            print("ERROR \(error)")
+    private func setup() {
+        do {
+            try watchAlbum()
+        } catch {
+            self.errorMessage.onNext(error.localizedDescription)
+        }
+    }
+    
+    private func watchAlbum() throws {
+        try dataProvider.getAlbum(by: albumId)?.subscribe(onNext: { [unowned self] album in
+            self.savedAlbum = album
+            self.albumViewModel.accept(AlbumViewModel(with: album))
         }).disposed(by: disposeBag)
+    }
+    
+    // MARK: - Methods
+    
+    func getAlbumInfo() {
+        let noTracks = albumViewModel.value.tracks.count == 0
+        
+        let mbid = albumViewModel.value.mbid
+        let title = albumViewModel.value.title
+    
+        if noTracks { isLoading.accept(true) }
+        
+        networkService.albumInfo(by: mbid, name: title).subscribe(onSuccess: { [unowned self] albumDetails in
+            if noTracks { self.isLoading.accept(false) }
+            if let savedAlbum = self.savedAlbum {
+                do {
+                    try self.dataProvider.update(album: savedAlbum) { album in
+                        let viewModel = AlbumViewModel(with: albumDetails)
+                        album.update(with: viewModel)
+                    }
+                } catch {
+                    self.errorMessage.onNext(error.localizedDescription)
+                }
+            } else {
+                self.albumViewModel.accept(AlbumViewModel(with: albumDetails))
+            }
+        }, onError: { [unowned self] error in
+            if noTracks { self.isLoading.accept(false) }
+            self.warning.onNext(error.localizedDescription)
+        }).disposed(by: disposeBag)
+    }
+    
+    func manageAlbumKeeping() {
+        guard let album = Model.Album.createAlbum(with: albumViewModel.value) else {
+            return
+        }
+        
+        if let savedAlbum = savedAlbum {
+            do {
+                let isDeleted = !savedAlbum.isDeleted
+                try dataProvider.set(album: savedAlbum, isDeleted: isDeleted)
+            } catch {
+                errorMessage.onNext(error.localizedDescription)
+            }
+        } else {
+            do {
+                try dataProvider.save(album: album)
+                try watchAlbum()
+            } catch {
+                errorMessage.onNext(error.localizedDescription)
+            }
+        }
+
+    }
+
+    deinit {
+        if debug { print("\(type(of: self)) destroyed") }
     }
     
 }

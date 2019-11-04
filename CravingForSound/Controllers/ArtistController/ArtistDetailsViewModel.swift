@@ -11,6 +11,7 @@ import Net
 import RxSwift
 import RxCocoa
 import Model
+import Common
 
 final class ArtistDetailsViewModel {
     
@@ -19,22 +20,25 @@ final class ArtistDetailsViewModel {
     private let disposeBag = DisposeBag()
     private let networkService: NetworkServiceProtocol
     private let dataProvider: DataProvidingProtocol
-    
-    let id: String
+    private let artistId: String
+   
     let title: String
-    let items = PublishSubject<[AlbumCollectionViewModel]>()
+    let albums = BehaviorRelay<[AlbumViewModel]>(value: [])
+    let error = PublishSubject<String>()
+    let isLoading = BehaviorRelay(value: false)
     
     // MARK: - Navigation
     
     let navigation = (
         goBack: PublishSubject<Void>(),
-        albumDetails: PublishSubject<AlbumCollectionViewModel>()
+        close: PublishSubject<Void>(),
+        albumDetails: PublishSubject<AlbumViewModel>()
     )
     
     // MARK: - Methods
     
     init(with viewModel: ArtistViewModel, networkService: NetworkServiceProtocol, dataProvider: DataProvidingProtocol) {
-        self.id = viewModel.mdib
+        self.artistId = viewModel.mdib
         self.title = viewModel.name
         
         self.networkService = networkService
@@ -42,11 +46,18 @@ final class ArtistDetailsViewModel {
     }
     
     func getAlbums() {
-        networkService.topAlbums(by: id).subscribe(onSuccess: { albums in
-            self.items.onNext(albums.map { AlbumCollectionViewModel(net: $0) })
-        }, onError: { error in
-            print("ERROR \(error)")
+        isLoading.accept(true)
+        networkService.topAlbums(by: artistId).subscribe(onSuccess: { [unowned self] albums in
+            self.isLoading.accept(false)
+            self.albums.accept(albums.map { AlbumViewModel(with: $0) })
+        }, onError: { [unowned self] error in
+            self.isLoading.accept(false)
+            self.error.onNext(error.localizedDescription)
         }).disposed(by: disposeBag)
+    }
+    
+    deinit {
+        if debug { print("\(type(of: self)) destroyed") }
     }
     
 }

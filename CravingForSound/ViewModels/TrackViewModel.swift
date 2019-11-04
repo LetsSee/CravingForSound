@@ -7,21 +7,27 @@
 //
 
 import Net
+import Model
 
-protocol TrackViewPresentingProtocol {
+protocol TrackPresentingProtocol {
     
     var name: String { get }
     var number: String { get }
     
 }
 
-struct TrackViewModel: TrackViewPresentingProtocol {
+struct TrackViewModel: TrackPresentingProtocol {
     
     let name: String
     let number: String
     
     init(with track: Net.Track) {
         self.name = track.name
+        self.number = "\(track.rank)"
+    }
+    
+    init(with track: Model.Track) {
+        self.name = track.title
         self.number = "\(track.rank)"
     }
     

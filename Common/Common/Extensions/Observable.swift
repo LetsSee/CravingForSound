@@ -1,5 +1,5 @@
 //
-//  Observable+Extensions.swift
+//  Observable.swift
 //  Common
 //
 //  Created by Rodion on 10/10/2019.

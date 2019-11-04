@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import RxSwift
 
 protocol CommonNavigation {
     
+    var disposeBag: DisposeBag { get }
     func goBack(in navController: UINavigationController, animated: Bool, toRoot: Bool)
     func dismissModalController(in window: UIWindow, animated: Bool)
 }

@@ -20,7 +20,7 @@ final class ArtistTableViewCell: UITableViewCell {
         avatarImageView.clipsToBounds = true
     }
     
-    func setup(with viewModel: ArtistViewPresentingProtocol) {
+    func setup(with viewModel: ArtistPresentingProtocol) {
         nameLabel?.text = viewModel.name
         
         if let url = viewModel.imageUrl {

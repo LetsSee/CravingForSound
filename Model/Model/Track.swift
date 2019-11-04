@@ -11,6 +11,8 @@ import RealmSwift
 
 public final class Track: Object {
 
-    @objc dynamic var title = ""
-
+    @objc public dynamic var title: String = ""
+    @objc public dynamic var rank: Int = 0
+    @objc public dynamic var duration: Int = 0
+    
 }

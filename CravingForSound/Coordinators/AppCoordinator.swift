@@ -19,8 +19,8 @@ final class AppCoordinator: Coordinator<Never>, CommonNavigation {
     
     private let window = UIWindow(frame: UIScreen.main.bounds)
     private let navController = UINavigationController()
-    private let dataProvider = DataProvider()
-    private let networkService = NetworkService()
+    let dataProvider = DataProvider()
+    let networkService = NetworkService()
     
     // MARK: - Start
     
@@ -39,9 +39,7 @@ final class AppCoordinator: Coordinator<Never>, CommonNavigation {
     // MARK: - Setup
     
     private func configureAppearance() {
-        //        navController.navigationBar.barTintColor = .black
-        //        navController.navigationBar.isTranslucent = true
-        //        navController.navigationBar.barStyle = .blackTranslucent
+        UINavigationBar.appearance().tintColor = .systemGreen
     }
     
     // MARK: - Navigation
@@ -52,58 +50,55 @@ final class AppCoordinator: Coordinator<Never>, CommonNavigation {
         let viewModel = MainViewModel(with: dataProvider, networkService: networkService)
         controller.viewModel = viewModel
         
-        viewModel.artistLookupNavigation.bind { [unowned self] in
-            self.showArtistLookupController(to: navController, animated: true)
+        viewModel.navigation.artistSearch.bind { [unowned self] in
+            self.showSearch(in: self.window)
         }.disposed(by: disposeBag)
-        
-        navController.pushViewController(controller, animated: animated)
-    }
-    
-    private func showArtistLookupController(to navController: UINavigationController, animated: Bool) {
-        guard let controller = R.storyboard.main.artistLookupViewController() else { return }
-        
-        let viewModel = ArtistLookupViewModel(with: networkService)
-        controller.viewModel = viewModel
-        
-        viewModel.navigation.goBack.bind { [unowned self] in
-            self.goBack(in: navController, animated: true)
-        }.disposed(by: disposeBag)
-        
-        viewModel.navigation.artistDetails.bind { [unowned self] artist in
-            self.showArtistDetailsViewController(with: artist, to: navController, animated: true)
-        }.disposed(by: disposeBag)
-        
-        navController.pushViewController(controller, animated: animated)
-    }
-    
-    private func showArtistDetailsViewController(with artist: ArtistViewModel,
-                                                 to navController: UINavigationController,
-                                                 animated: Bool) {
-        guard let controller = R.storyboard.main.artistDetailsViewController() else { return }
-        
-        let viewModel = ArtistDetailsViewModel(with: artist,
-                                               networkService: networkService,
-                                               dataProvider: dataProvider)
-        controller.viewModel = viewModel
         
         viewModel.navigation.albumDetails.bind { [unowned self] album in
-            self.showAlbumDetailsViewController(with: album, to: navController, animated: true)
+            self.showAlbumDetailsViewController(with: album,
+                                                to: navController,
+                                                animated: true,
+                                                showCloseButton: false)
         }.disposed(by: disposeBag)
         
         navController.pushViewController(controller, animated: animated)
     }
     
-    private func showAlbumDetailsViewController(with album: AlbumCollectionViewModel,
-                                                to navController: UINavigationController,
-                                                animated: Bool) {
+    func showAlbumDetailsViewController(with album: AlbumPresentingProtocol,
+                                        to navController: UINavigationController,
+                                        animated: Bool,
+                                        showCloseButton: Bool) {
         guard let controller = R.storyboard.main.albumDetailsViewController() else { return }
         
         let viewModel = AlbumDetailsViewModel(with: album,
                                               networkService: networkService,
                                               dataProvider: dataProvider)
+        
+        viewModel.navigation.goBack.bind { [unowned self] in
+            self.goBack(in: navController, animated: true)
+        }.disposed(by: disposeBag)
+        
+        viewModel.navigation.close.bind { [unowned self] in
+            self.dismissModalController(in: self.window, animated: true)
+        }.disposed(by: disposeBag)
+        
         controller.viewModel = viewModel
         
         navController.pushViewController(controller, animated: animated)
+    }
+    
+    private func showSearch(in window: UIWindow) {
+        let searchCoordinator = SearchCoordinator(window: window)
+        
+        coordinate(to: searchCoordinator).subscribe(onSuccess: { [unowned self] result in
+            switch result {
+            case .close:
+                self.dismissModalController(in: self.window, animated: true)
+            case .dismiss:
+                if debug { print("SearchCoordinator dismissed") }
+            }
+            
+        }).disposed(by: disposeBag)
     }
     
 }

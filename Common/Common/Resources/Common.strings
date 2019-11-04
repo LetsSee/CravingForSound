@@ -11,3 +11,12 @@
 "artist" = "Artist";
 "check.connection" = "Check your internet connection";
 "something.goes.wrong" = "Something goes wrong";
+"save" = "Save";
+"delete" = "Delete";
+
+"network.error" = "Network error";
+"network.unreachable" = "No connection";
+"ok" = "Ok";
+"try.again" = "Try again";
+"close" = "Close";
+"no.albums" = "No albums saved so far.\nPress search and add some albums";

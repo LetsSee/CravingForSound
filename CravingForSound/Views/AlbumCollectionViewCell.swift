@@ -20,7 +20,7 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
     
-    func setup(with viewModel: AlbumCollectionViewPresentingProtocol) {
+    func setup(with viewModel: AlbumPresentingProtocol) {
         titleLabel.text = viewModel.title
         artistLabel.text = viewModel.artist
         

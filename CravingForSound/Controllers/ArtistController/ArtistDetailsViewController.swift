@@ -16,9 +16,11 @@ final class ArtistDetailsViewController: UIViewController {
     // MARK: - Properties
     
     private let disposeBag = DisposeBag()
+    private let spinner  = SpinnerView()
+
     var viewModel: ArtistDetailsViewModel!
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionView: UICollectionView!
     
     // MARK: - Life cycle
     
@@ -34,14 +36,25 @@ final class ArtistDetailsViewController: UIViewController {
     private func setupUI() {
         navigationItem.title = viewModel.title
         collectionView.collectionViewLayout = createCollectionLayout()
+        addSpinner(spinner)
     }
     
     private func setupRx() {
-        viewModel.items.bind(to: items()).disposed(by: disposeBag)
+        viewModel.albums.asDriver().drive(items()).disposed(by: disposeBag)
         
-        collectionView.rx.modelSelected(AlbumCollectionViewModel.self).subscribe(onNext: { [unowned self] viewModel in
+        collectionView.rx.modelSelected(AlbumViewModel.self).subscribe(onNext: { [unowned self] viewModel in
             self.viewModel.navigation.albumDetails.onNext(viewModel)
         }).disposed(by: disposeBag)
+        
+        viewModel.error.subscribe(onNext: { [unowned self] message in
+            self.alert(message: message, tryAgainHandler: { [unowned self] in
+                self.viewModel.getAlbums()
+            }, closeHandler: { [unowned self] in
+                self.viewModel.navigation.goBack.onNext()
+            })
+        }).disposed(by: disposeBag)
+        
+        viewModel.isLoading.bind(to: spinner.rx.isVisible).disposed(by: disposeBag)
     }
     
     private func createCollectionLayout() -> UICollectionViewFlowLayout {
@@ -54,7 +67,7 @@ final class ArtistDetailsViewController: UIViewController {
     
     // MARK: - Rx methods
     
-    func items() -> (_ source: Observable<[AlbumCollectionViewModel]>) -> Disposable {
+    func items() -> (_ source: Observable<[AlbumViewModel]>) -> Disposable {
         return { [unowned self] source in
             source
                 .bind(to: self.collectionView.rx
