@@ -9,18 +9,54 @@
 import UIKit
 import AlamofireImage
 import Rswift
+import SnapKit
+import Common
 
 final class AlbumCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet private weak var imageView: UIImageView!
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var artistLabel: UILabel!
+    private let imageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let artistLabel = UILabel()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    // MARK: - Init & overrides
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
     }
     
-    func setup(with viewModel: AlbumPresentingProtocol) {
+    // MARK: - Setup
+    
+    private func setup() {
+        contentView.addSubviews(imageView, titleLabel, artistLabel)
+        imageView.contentMode = .scaleAspectFill
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        artistLabel.font = UIFont.systemFont(ofSize: 15)
+        
+        artistLabel.textColor = .systemGray
+        
+        imageView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview().inset(standardOffset)
+            make.bottom.equalTo(titleLabel.snp.top)
+            make.width.equalTo(imageView.snp.height)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(standardOffset)
+            make.bottom.equalTo(artistLabel.snp.top)
+        }
+        
+        artistLabel.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview().inset(standardOffset)
+        }
+    }
+    
+    func configure(with viewModel: AlbumPresentingProtocol) {
         titleLabel.text = viewModel.title
         artistLabel.text = viewModel.artist
         

@@ -37,6 +37,7 @@ final class ArtistDetailsViewController: UIViewController {
         navigationItem.title = viewModel.title
         collectionView.collectionViewLayout = createCollectionLayout()
         addSpinner(spinner)
+        collectionView.register(AlbumCollectionViewCell.self, for: AlbumCollectionViewCell.defaultIdentifier)
     }
     
     private func setupRx() {
@@ -73,7 +74,7 @@ final class ArtistDetailsViewController: UIViewController {
                 .bind(to: self.collectionView.rx
                     .items(cellIdentifier: AlbumCollectionViewCell.defaultIdentifier,
                            cellType: AlbumCollectionViewCell.self)) { _, element, cell in
-                            cell.setup(with: element)
+                            cell.configure(with: element)
             }
         }
     }

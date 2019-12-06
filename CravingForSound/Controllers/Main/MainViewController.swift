@@ -39,6 +39,7 @@ final class MainViewController: UIViewController {
         navigationItem.rightBarButtonItem = searchButton
         collectionView.collectionViewLayout = createCollectionLayout()
         noItemsLabel.text = R.string.common.noAlbums()
+        collectionView.register(AlbumCollectionViewCell.self, for: AlbumCollectionViewCell.defaultIdentifier)
     }
     
     private func setupRx() {
@@ -63,7 +64,7 @@ final class MainViewController: UIViewController {
                 .bind(to: self.collectionView.rx
                     .items(cellIdentifier: AlbumCollectionViewCell.defaultIdentifier,
                            cellType: AlbumCollectionViewCell.self)) { _, element, cell in
-                            cell.setup(with: element)
+                            cell.configure(with: element)
             }
         }
     }
