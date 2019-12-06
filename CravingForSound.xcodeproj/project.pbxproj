@@ -48,6 +48,7 @@
 		66E4649A2353AC4900473FDE /* AlbumHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E464992353AC4900473FDE /* AlbumHeaderView.swift */; };
 		66E4649D2353BABC00473FDE /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E4649C2353BABC00473FDE /* TrackTableViewCell.swift */; };
 		66E4649F2353BAD500473FDE /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E4649E2353BAD500473FDE /* TrackViewModel.swift */; };
+		66F5E998239A59090061F436 /* AlbumNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F5E997239A59090061F436 /* AlbumNavigation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -110,6 +111,7 @@
 		66E464992353AC4900473FDE /* AlbumHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumHeaderView.swift; sourceTree = "<group>"; };
 		66E4649C2353BABC00473FDE /* TrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
 		66E4649E2353BAD500473FDE /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
+		66F5E997239A59090061F436 /* AlbumNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumNavigation.swift; sourceTree = "<group>"; };
 		A35A657AEC24AA76C82D480C /* Pods-CravingForSound.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CravingForSound.debug.xcconfig"; path = "Target Support Files/Pods-CravingForSound/Pods-CravingForSound.debug.xcconfig"; sourceTree = "<group>"; };
 		C6302001E5CDEEDF30212988 /* Pods_CravingForSound.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CravingForSound.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -206,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				66788549234B31EA00BFB5C3 /* CommonNavigation.swift */,
+				66F5E997239A59090061F436 /* AlbumNavigation.swift */,
 				66788547234B319300BFB5C3 /* Coordinator.swift */,
 				66788545234B316200BFB5C3 /* AppCoordinator.swift */,
 				66429B77235F3A80003037B6 /* SearchCoordinator.swift */,
@@ -489,6 +492,7 @@
 				66B81684234F0AED000B2499 /* ArtistTableViewCell.swift in Sources */,
 				66429B78235F3A80003037B6 /* SearchCoordinator.swift in Sources */,
 				66B81681234F0ACD000B2499 /* ArtistLookupViewModel.swift in Sources */,
+				66F5E998239A59090061F436 /* AlbumNavigation.swift in Sources */,
 				66147FA0237051A100E03CD4 /* SpinnerView.swift in Sources */,
 				669A919023564D6F006A8436 /* UIScreen+Extensions.swift in Sources */,
 				66E4649D2353BABC00473FDE /* TrackTableViewCell.swift in Sources */,

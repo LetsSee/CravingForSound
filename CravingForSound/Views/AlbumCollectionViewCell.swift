@@ -42,7 +42,7 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
         
         imageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview().inset(standardOffset)
-            make.bottom.equalTo(titleLabel.snp.top)
+            make.bottom.equalTo(titleLabel.snp.top).offset(standardOffset)
             make.width.equalTo(imageView.snp.height)
         }
         

@@ -13,12 +13,13 @@ import RxSwift
 import Model
 import Net
 
-final class AppCoordinator: Coordinator<Never>, CommonNavigation {
+final class AppCoordinator: Coordinator<Never>, AlbumNavigation {
     
     // MARK: - Properties
     
-    private let window = UIWindow(frame: UIScreen.main.bounds)
     private let navController = UINavigationController()
+    
+    let window = UIWindow(frame: UIScreen.main.bounds)
     let dataProvider = DataProvider()
     let networkService = NetworkService()
     

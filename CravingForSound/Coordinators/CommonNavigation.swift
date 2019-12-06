@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-protocol CommonNavigation {
+protocol CommonNavigation: class {
     
     var disposeBag: DisposeBag { get }
     func goBack(in navController: UINavigationController, animated: Bool, toRoot: Bool)

@@ -13,7 +13,7 @@ import RxSwift
 import Model
 import Net
 
-final class SearchCoordinator: Coordinator<SearchCoordinator.Result>, CommonNavigation {
+final class SearchCoordinator: Coordinator<SearchCoordinator.Result>, AlbumNavigation {
 
     // MARK: - Result
     
@@ -21,8 +21,9 @@ final class SearchCoordinator: Coordinator<SearchCoordinator.Result>, CommonNavi
     
     // MARK: - Properties
     
-    private let window: UIWindow
     private let navController = UINavigationController()
+    
+    let window: UIWindow
     let dataProvider = DataProvider()
     let networkService = NetworkService()
     
@@ -107,29 +108,6 @@ final class SearchCoordinator: Coordinator<SearchCoordinator.Result>, CommonNavi
         viewModel.navigation.close.bind { [unowned self] in
             self.dismissModalController(in: self.window, animated: true)
         }.disposed(by: disposeBag)
-        
-        navController.pushViewController(controller, animated: animated)
-    }
-    
-    func showAlbumDetailsViewController(with album: AlbumPresentingProtocol,
-                                        to navController: UINavigationController,
-                                        animated: Bool,
-                                        showCloseButton: Bool) {
-        guard let controller = R.storyboard.main.albumDetailsViewController() else { return }
-        
-        let viewModel = AlbumDetailsViewModel(with: album,
-                                              networkService: networkService,
-                                              dataProvider: dataProvider)
-        
-        viewModel.navigation.goBack.bind { [unowned self] in
-            self.goBack(in: navController, animated: true)
-        }.disposed(by: disposeBag)
-        
-        viewModel.navigation.close.bind { [unowned self] in
-            self.dismissModalController(in: self.window, animated: true)
-        }.disposed(by: disposeBag)
-        
-        controller.viewModel = viewModel
         
         navController.pushViewController(controller, animated: animated)
     }
