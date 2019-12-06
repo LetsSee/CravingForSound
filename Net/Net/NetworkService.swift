@@ -93,6 +93,7 @@ public final class NetworkService: NetworkServiceProtocol {
                         observer(.error(NetworkServiceError.badFormat))
                     }
                 }, onError: { error in
+                    NetworkMonitor.shared.requestFinished()
                     observer(.error(NetworkServiceError.networkError))
                 })
         }
